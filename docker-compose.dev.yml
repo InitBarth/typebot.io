@@ -7,6 +7,7 @@ services:
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       POSTGRES_DB: 'typebot'
       POSTGRES_PASSWORD: 'typebot'
@@ -21,6 +22,7 @@ services:
       MINIO_ROOT_PASSWORD: minio123
     volumes:
       - s3_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
   # This service just make sure a bucket with the right policies is created
   createbuckets:
     image: minio/mc
@@ -34,6 +36,8 @@ services:
       /usr/bin/mc anonymous set public minio/typebot/public;
       exit 0;
       "
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 volumes:
   db_data:
   s3_data:
